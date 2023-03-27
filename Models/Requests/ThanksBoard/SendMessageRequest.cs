@@ -8,5 +8,6 @@
         public int ReceiverId { get; set; }
         public string Message { get; set; } = string.Empty;
         public DateTime SendTime { get; set; } = DateTime.Now;
+        public Category Category { get; set; }
     }
 }

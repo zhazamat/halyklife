@@ -13,6 +13,7 @@ namespace hbk.Models
         public string Message { get; set; } = string.Empty;
         public DateTime DateReceived { get; set; }
         public DateTime DateRead { get; set; }
+        public Category Category { get; set; }
         public int? ReceiverId { get; set; }
 
         [JsonIgnore]
@@ -20,6 +21,20 @@ namespace hbk.Models
         public int? SenderId { get; set; }
         [JsonIgnore]
         public virtual Employee Sender { get; set; }
+
+        internal object DateDiffDays(DateTime dateReceived, DateTime now)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public enum Category
+    { Confidence,
+      Efficiency,
+      Progressorism,
+      Openness,
+      Innovation,
+      Responsibility,
+      Manifold
 
     }
 }

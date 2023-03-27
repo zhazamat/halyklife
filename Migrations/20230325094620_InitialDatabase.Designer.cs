@@ -12,8 +12,8 @@ using hbk.Data;
 namespace hbk.Migrations
 {
     [DbContext(typeof(HbkApiDbContext))]
-    [Migration("20230322190108_UpdateReference")]
-    partial class UpdateReference
+    [Migration("20230325094620_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,6 +152,9 @@ namespace hbk.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Category")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("DateRead")
                         .HasColumnType("timestamp with time zone");

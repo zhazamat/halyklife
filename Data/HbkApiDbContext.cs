@@ -36,7 +36,11 @@ namespace hbk.Data
         .WithMany(m => m.EmployeeMarkets)
         .HasForeignKey(em => em.MarketId);
 
+
+          
+     
         }
+
       
 
         public DbSet<Employee> Employees { get; set; }

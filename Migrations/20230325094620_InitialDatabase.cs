@@ -65,6 +65,7 @@ namespace hbk.Migrations
                     Message = table.Column<string>(type: "text", nullable: false),
                     DateReceived = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DateRead = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Category = table.Column<int>(type: "integer", nullable: false),
                     ReceiverId = table.Column<int>(type: "integer", nullable: false),
                     SenderId = table.Column<int>(type: "integer", nullable: true)
                 },

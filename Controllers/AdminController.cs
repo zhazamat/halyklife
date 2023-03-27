@@ -99,7 +99,8 @@ namespace hbk.Controllers
                 Message = sendMessageRequest.Message,
                 SenderId = sendMessageRequest.SenderId,
                 ReceiverId = sendMessageRequest.ReceiverId,
-                DateReceived = sendMessageRequest.SendTime
+                DateReceived = sendMessageRequest.SendTime,
+                Category=sendMessageRequest.Category
 
             };
             _context.ThanksBoards.Add(thanksBoard);
