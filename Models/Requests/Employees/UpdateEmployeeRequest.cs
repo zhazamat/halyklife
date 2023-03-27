@@ -16,7 +16,7 @@
         public string Mobile { get; set; } = string.Empty;
         public string WhatsAppMobile { get; set; } = string.Empty;
 
-        public DateTime StartDate { get; set; }
+      
         public string OfficeNumber { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;

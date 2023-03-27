@@ -58,7 +58,7 @@ namespace hbk.Controllers
                 IsLocal = addEmployeeRequest.IsLocal,
                 linkImg = addEmployeeRequest.linkImg,
                 DirectPhone = addEmployeeRequest.DirectPhone,
-                StartDate=addEmployeeRequest.StartDate,
+               
                 Email = addEmployeeRequest.Email,
                 Mobile = addEmployeeRequest.Mobile,
                 OfficeNumber = addEmployeeRequest.OfficeNumber,
@@ -92,7 +92,7 @@ namespace hbk.Controllers
                 employee.Email = updateEmployeeRequest.Email;
                 employee.OfficeNumber = updateEmployeeRequest.OfficeNumber;
                 employee.DirectPhone = updateEmployeeRequest.DirectPhone;
-                employee.StartDate = updateEmployeeRequest.StartDate;
+                
                 employee.Mobile = updateEmployeeRequest.Mobile;
                 employee.PersonnelNumber = updateEmployeeRequest.PersonnelNumber;
                 employee.linkImg = updateEmployeeRequest.linkImg;

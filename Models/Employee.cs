@@ -23,7 +23,6 @@ namespace hbk.Models
         public string FullName { get; set; } = string.Empty;
         public string PositionTitle { get; set; } = string.Empty;
         public string Department { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; }
         public string Phone { get; set; } = string.Empty;
         public string Company { get; set; } = string.Empty;
         public string DirectPhone { get; set; } = string.Empty;

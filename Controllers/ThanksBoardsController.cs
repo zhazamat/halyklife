@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using hbk.Data;
 using hbk.Models;
-
-using Azure.Identity;
 using hbk.Models.Requests.ThanksBoard;
-using System.Diagnostics.Metrics;
-using System.Security.Policy;
+using Microsoft.AspNetCore.Http;
 
 namespace hbk.Controllers
 {
@@ -187,7 +179,7 @@ namespace hbk.Controllers
             return list.Count();
         }
 
-        [HttpGet("/all_category_messages")]
+      /*  [HttpGet("/all_category_messages")]
         public async Task<IActionResult> Respon()
         {
             var map = new Dictionary<Category, int>();
@@ -204,26 +196,33 @@ namespace hbk.Controllers
                 return Ok(map);
            
 
-        }
+        }*/
         
         private Dictionary<int,int> CountReceiverRating(List<ThanksBoard> list)
         {
             var map = new Dictionary<int, int>();
+           
             foreach (var line in list.GroupBy(info => info.ReceiverId)
                         .Select(group => new
                         {
                             ReceiverId = group.Key,
                             Count = group.Count()
                         })
-                        .OrderBy(x => x.Count))
+                        .OrderByDescending(c => c.Count)
+                        )
+
 
                 map.Add((int)line.ReceiverId, line.Count);
 
+            var key = map.MaxBy(kvp => kvp.Value).Key;
+            var value = map.MaxBy(kvp => kvp.Value).Value;
+            var map1 = new Dictionary<int, int>();
+            map1.Add(key, value);
 
-            return map;
+            return map1 ;
         }
         
-        [HttpGet("/get_confidence")]
+        [HttpGet("/get_confidence_top")]
         public async Task<IActionResult> GetConfidence()
         {
             var Respon = await (from q2 in _context.ThanksBoards
@@ -232,17 +231,17 @@ namespace hbk.Controllers
               return Ok(CountReceiverRating(Respon));
         }
 
-        [HttpGet("/get_responsibility")]
+        [HttpGet("/get_responsibility_top")]
         public async Task<IActionResult> GetResponsibility()
         {
-            var Respon = await (from q2 in _context.ThanksBoards
+            var Responsibility = await (from q2 in _context.ThanksBoards
                                 where q2.Category == Category.Responsibility
                                 select q2).ToListAsync();
-            return Ok(CountReceiverRating(Respon));
+            return Ok(CountReceiverRating(Responsibility));
 
         }
 
-        [HttpGet("/get_progressorism")]
+        [HttpGet("/get_progressorism_top")]
         public async Task<IActionResult> GetProgressorism()
         {var Respon = await (from q2 in _context.ThanksBoards
                                 where q2.Category == Category.Progressorism
@@ -250,7 +249,7 @@ namespace hbk.Controllers
             return Ok(CountReceiverRating(Respon));
         }
 
-        [HttpGet("/get_efficiency")]
+        [HttpGet("/get_efficiency_top")]
         public async Task<IActionResult> GetEfficiency()
         {
             var Respon = await (from q2 in _context.ThanksBoards
@@ -259,7 +258,7 @@ namespace hbk.Controllers
             return Ok(CountReceiverRating(Respon));
         }
 
-        [HttpGet("/get_openness")]
+        [HttpGet("/get_openness_top")]
         public async Task<IActionResult> GetOpenness()
         {
             var Respon = await (from q2 in _context.ThanksBoards
@@ -268,7 +267,7 @@ namespace hbk.Controllers
             return Ok(CountReceiverRating(Respon));
         }
 
-        [HttpGet("/get_innovation")]
+        [HttpGet("/get_innovation_top")]
         public async Task<IActionResult> GetInnovation()
         {
             var Respon = await (from q2 in _context.ThanksBoards
@@ -277,7 +276,7 @@ namespace hbk.Controllers
             return Ok(CountReceiverRating(Respon));
         }
 
-        [HttpGet("/get_manifold")]
+        [HttpGet("/get_manifold_top")]
         public async Task<IActionResult> GetManifold()
         {
             var Respon = await (from q2 in _context.ThanksBoards

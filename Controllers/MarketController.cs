@@ -17,9 +17,8 @@ namespace hbk.Controllers
         // GET: api/<MarketController>
         // GET: api/Employees
         private readonly HbkApiDbContext _context;
-        private readonly ThanksBoardsController _thanksBoardsController;
-        //private readonly ThanksBoardsController _boardsController;
-
+       // private readonly ThanksBoardsController _thanksBoardsController;
+       
         public MarketController(HbkApiDbContext context)
         {
             _context = context;
