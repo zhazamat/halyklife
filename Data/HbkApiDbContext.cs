@@ -36,9 +36,13 @@ namespace hbk.Data
         .WithMany(m => m.EmployeeMarkets)
         .HasForeignKey(em => em.MarketId);
 
+            modelBuilder.Entity<ThanksBoard>()
+               .HasOne<Category>(e => e.Category)
+               .WithMany(t => t.Messages)
+               .HasForeignKey(m => m.CategoryId);
 
-          
-     
+
+
         }
 
       
@@ -46,6 +50,7 @@ namespace hbk.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<ThanksBoard> ThanksBoards { get; set; }
         public DbSet<Market> Markets { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<EmployeeMarket> EmployeeMarkets { get; set; }
       
 

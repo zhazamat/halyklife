@@ -83,9 +83,9 @@ namespace hbk.Controllers
             return NoContent();
         }
 
-        // POST: api/Admin
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/add_message")]
+            // POST: api/Admin
+            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            [HttpPost("/add_message")]
         public async Task<ActionResult<ThanksBoard>> PostThanksBoard(SendMessageRequest sendMessageRequest)
         {
           if (_context.ThanksBoards == null)
@@ -100,7 +100,7 @@ namespace hbk.Controllers
                 SenderId = sendMessageRequest.SenderId,
                 ReceiverId = sendMessageRequest.ReceiverId,
                 DateReceived = sendMessageRequest.SendTime,
-                Category=sendMessageRequest.Category
+                CategoryId=sendMessageRequest.CategoryId
 
             };
             _context.ThanksBoards.Add(thanksBoard);
@@ -137,7 +137,7 @@ namespace hbk.Controllers
                 return NotFound("Таблица не найдено");
             }
             
-            //
+           
           
             int thanksBoardId =await (from q1 in _context.Employees
                                      join q2 in _context.ThanksBoards on q1.Id equals q2.SenderId
@@ -154,9 +154,7 @@ namespace hbk.Controllers
         {
             return (_context.ThanksBoards?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-
-
+/*
         // GET: api/Markets
         [HttpGet("/get_all_products_in_market")]
         public async Task<ActionResult<IEnumerable<Market>>> GetMarkets()
@@ -269,6 +267,121 @@ namespace hbk.Controllers
         private bool MarketExists(int? id)
         {
             return (_context.Markets?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+*/
+        [HttpGet("get_all_categories")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        {
+            if (_context.Categories == null)
+            {
+                return NotFound();
+            }
+            var categories= await _context.Categories
+                .Include(c=>c.Messages)
+                .ToListAsync();
+           
+            return Ok(categories);
+        }
+
+        // GET: api/Categories/5
+        [HttpGet("get_category_by/{id}")]
+        public async Task<ActionResult<Category>> GetCategory(int id)
+        {
+            if (_context.Categories == null)
+            {
+                return NotFound();
+            }
+            var category = await _context.Categories.FindAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return category;
+        }
+
+        // PUT: api/Categories/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("update_category/{id}")]
+        public async Task<IActionResult> PutCategory(int id, UpdateCategory updateCategory)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                category.Name = updateCategory.Name;
+
+
+                return Ok(category);
+
+
+            }
+
+            _context.Entry(updateCategory).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CategoryExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Categories
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("save_category")]
+        public async Task<ActionResult<Category>> PostCategory(AddCategory addCategory)
+        {
+            if (_context.Categories == null)
+            {
+                return Problem("Entity set 'HbkApiDbContext.Categories'  is null.");
+            }
+            Category c = new Category()
+            {
+
+                Name = addCategory.Name
+
+            };
+            _context.Categories.Add(c);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCategory", new { id = c.Id }, c);
+        }
+
+        // DELETE: api/Categories/5
+        [HttpDelete("category_delete/{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            if (_context.Categories == null)
+            {
+                return NotFound();
+            }
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool CategoryExists(int id)
+        {
+            return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 

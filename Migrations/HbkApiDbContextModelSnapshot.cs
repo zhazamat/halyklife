@@ -22,6 +22,23 @@ namespace hbk.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("hbk.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("categories");
+                });
+
             modelBuilder.Entity("hbk.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -147,11 +164,9 @@ namespace hbk.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Category")
+                    b.Property<int?>("CategoryId")
+                        .IsRequired()
                         .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateRead")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateReceived")
                         .HasColumnType("timestamp with time zone");
@@ -168,6 +183,8 @@ namespace hbk.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ReceiverId");
 
@@ -197,6 +214,12 @@ namespace hbk.Migrations
 
             modelBuilder.Entity("hbk.Models.ThanksBoard", b =>
                 {
+                    b.HasOne("hbk.Models.Category", "Category")
+                        .WithMany("Messages")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("hbk.Models.Employee", "Receiver")
                         .WithMany("Messages")
                         .HasForeignKey("ReceiverId")
@@ -207,9 +230,16 @@ namespace hbk.Migrations
                         .WithMany()
                         .HasForeignKey("SenderId");
 
+                    b.Navigation("Category");
+
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("hbk.Models.Category", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("hbk.Models.Employee", b =>

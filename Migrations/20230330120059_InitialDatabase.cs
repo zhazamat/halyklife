@@ -13,6 +13,19 @@ namespace hbk.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "employees",
                 columns: table => new
                 {
@@ -22,7 +35,6 @@ namespace hbk.Migrations
                     FullName = table.Column<string>(type: "text", nullable: false),
                     PositionTitle = table.Column<string>(type: "text", nullable: false),
                     Department = table.Column<string>(type: "text", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Company = table.Column<string>(type: "text", nullable: false),
                     DirectPhone = table.Column<string>(type: "text", nullable: false),
@@ -64,14 +76,19 @@ namespace hbk.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Message = table.Column<string>(type: "text", nullable: false),
                     DateReceived = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DateRead = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Category = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
                     ReceiverId = table.Column<int>(type: "integer", nullable: false),
                     SenderId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_thanksboard", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_thanksboard_categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_thanksboard_employees_ReceiverId",
                         column: x => x.ReceiverId,
@@ -116,6 +133,11 @@ namespace hbk.Migrations
                 column: "MarketId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_thanksboard_CategoryId",
+                table: "thanksboard",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_thanksboard_ReceiverId",
                 table: "thanksboard",
                 column: "ReceiverId");
@@ -137,6 +159,9 @@ namespace hbk.Migrations
 
             migrationBuilder.DropTable(
                 name: "markets");
+
+            migrationBuilder.DropTable(
+                name: "categories");
 
             migrationBuilder.DropTable(
                 name: "employees");
