@@ -4,6 +4,7 @@ using hbk.Data;
 using hbk.Models;
 using hbk.Models.Requests.ThanksBoard;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace hbk.Controllers
 {
@@ -233,10 +234,8 @@ namespace hbk.Controllers
                         return map1 ;
             
         }
-
-       
      
-        [HttpGet("/get_top_receiver_messages_by_category")]
+        [HttpGet("/get_top_of_receiver_messages_by_category")]
         public async Task<IActionResult> GetReceiverMessagesByCategory(int categoryId)
         {
             var Respon=new List<ThanksBoard>();
@@ -249,12 +248,11 @@ namespace hbk.Controllers
                 {
                     return BadRequest("В этой катагории сообщений не найдено ");
                 }
-           
                 var map = CountReceiverRating(Respon).Keys.FirstOrDefault();
-           
+
                 var employee = await (from e in _context.Employees
                                       join th in _context.ThanksBoards on e.Id equals th.ReceiverId
-                                      where th.CategoryId == categoryId && e.Id==map
+                                      where th.CategoryId == categoryId && e.Id == map
                                       select new
                                       {
                                           eImg = e.linkImg,
@@ -262,46 +260,52 @@ namespace hbk.Controllers
                                           ePosition = e.PositionTitle,
                                           eEmail = e.Email,
                                           ePhone = e.Phone,
-                                          Message = new {senderName = th.Sender.FullName, categoryId = "за "+th.Category.Name, Messages=th.Message, sendTime="От "+th.DateReceived  }
+                                          Message = new { senderName = th.Sender.FullName, categoryId = "за " + th.Category.Name, Messages = th.Message, sendTime = "От " + th.DateReceived }
                                       })
                                       .ToListAsync();
-            return Ok(employee);
-            if (employee == null)
-            {
-                return NotFound("Пользователь не найден");
-            }
+                if (employee == null)
+                {
+                    return NotFound("Пользователь не найден");
+                }
+
+                return Ok(employee);
+            
+          
         }
 
-        [HttpGet("/count_top_receiver_messages_by_category")]
-        public async Task<IActionResult> CountReceiverMessagesByCategory(int categoryId)
+        [HttpGet("/count_top_of_receiver_messages_by_category")]
+        public async Task<IActionResult> CountTopOfReceiverMessagesByCategory()
+        { var map = new Dictionary<string,int>();
+            var map1 = new  Dictionary<string, int>();
+            var list = new List<int>();
+            foreach(var category in _context.Categories)
+            {
+               list.Add(category.Id);
+            }
+            foreach(var c in list){
+                var categoryName = (from l in _context.Categories
+                                    where l.Id == c 
+                                    select l.Name)
+                    .FirstOrDefault();
+                map.Add(categoryName, CountReceiverMessagesByCategory(c).MaxBy(kvp => kvp.Value).Value);
+             }
+            return Ok(map);
+       }
+        private Dictionary<int,int> CountReceiverMessagesByCategory(int categoryId)
         {
             var Respon = new List<ThanksBoard>();
 
-            Respon = await (from q2 in _context.ThanksBoards
+            Respon = (from q2 in _context.ThanksBoards
                             join q1 in _context.Categories on q2.CategoryId equals q1.Id
-                           // where q1.Id == categoryId
-                            select q2).ToListAsync();
-            if (Respon == null)
-            {
-                return BadRequest("В этой катагории сообщений не найдено ");
-            }
+                            where q1.Id == categoryId
+                            select q2).ToList();
+           
 
             var map = CountReceiverRating(Respon);
 
           
-            return Ok(map);
-        }
-          
-
-        }
-
-
-
-
-
-
-
-
+            return map;
+        } }
     }
     
 
