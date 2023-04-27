@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using System.ComponentModel;
 
 namespace hbk.Models
 {
@@ -9,36 +10,26 @@ namespace hbk.Models
     {
         [Key, Required]
         public int Id { get; set; }
-
-        public string Message { get; set; } = string.Empty;
-        public DateTime DateReceived { get; set; }
        
+        [DisplayName("Дата получения")]
+        public DateTime DateReceived { get; set; }
+        [DisplayName("Категория")]
         public int? CategoryId { get; set; }
         [JsonIgnore]
         public virtual Category Category { get; set; }
+        [DisplayName("Отправитель")]
+        public int? SenderId { get; set; }
+        [JsonIgnore]
+        public virtual Employee Sender { get; set; }
+        [DisplayName("Получатель")]
         public int? ReceiverId { get; set; }
 
         [JsonIgnore]
         public virtual Employee Receiver { get; set; }
-        public int? SenderId { get; set; }
-        [JsonIgnore]
-        public virtual Employee Sender { get; set; }
+        [DisplayName("Сообщение")]
+        public string Message { get; set; } = string.Empty;
 
-        internal object DateDiffDays(DateTime dateReceived, DateTime now)
-        {
-            throw new NotImplementedException();
-        }
+
     }
-   /* 
-    public enum Category
-    {
-        Confidence,
-        Efficiency,
-        Progressorism,
-        Openness,
-        Innovation,
-        Responsibility,
-        Manifold
-    }
-    */
+  
 }

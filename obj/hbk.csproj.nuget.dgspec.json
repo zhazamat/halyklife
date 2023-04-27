@@ -40,17 +40,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Azure.Identity": {
-              "target": "Package",
-              "version": "[1.8.2, )"
-            },
             "Microsoft.AspNetCore.Authentication.Negotiate": {
               "target": "Package",
               "version": "[6.0.15, )"
-            },
-            "Microsoft.Configuration.ConfigurationBuilders.Azure": {
-              "target": "Package",
-              "version": "[2.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -65,10 +57,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.4, )"
-            },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
-              "target": "Package",
-              "version": "[6.0.13, )"
             },
             "Npgsql": {
               "target": "Package",

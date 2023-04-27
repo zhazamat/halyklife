@@ -16,8 +16,12 @@ namespace hbk.Models
 
             [Key, Required]
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        [DisplayName("Название категории")]
+        public string CategoryName { get; set; } = string.Empty;
+        [NotMapped]
+        public string CategoryImg { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public ICollection<ThanksBoard> Messages { get; set; } = new List<ThanksBoard>();
-
+       
     }
 }

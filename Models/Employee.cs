@@ -19,19 +19,34 @@ namespace hbk.Models
       
         [Key,Required]
         public int Id { get; set; }
+        [Required]
+        [DisplayName("Табельный номер")]
         public string PersonnelNumber { get; set; } = string.Empty;
+        [DisplayName("ФИО")]
         public string FullName { get; set; } = string.Empty;
+        [DisplayName("Должность")]
         public string PositionTitle { get; set; } = string.Empty;
+        [DisplayName("Отдел")]
         public string Department { get; set; } = string.Empty;
+        [DisplayName("Внутренний номер")]
         public string Phone { get; set; } = string.Empty;
+        [DisplayName("Филиал")]
         public string Company { get; set; } = string.Empty;
+        [DisplayName("Прямой/рабочий номер")]
         public string DirectPhone { get; set; } = string.Empty;
+        [DisplayName("Мобильный телефон")]
         public string Mobile { get; set; } = string.Empty;
+        [DisplayName("Номер What's App")]
         public string WhatsAppMobile { get; set; } = string.Empty;
+        [DisplayName("Номер кабинета")]
         public string OfficeNumber { get; set; } = string.Empty;
+        [DisplayName("E-Mail")]
         public string Email { get; set; } = string.Empty;
+        [DisplayName("Состояние")]
         public string Status { get; set; } = string.Empty;
+        [NotMapped]
         public string linkImg { get; set; } = string.Empty;
+        [JsonIgnore]
         public bool IsLocal { get; set; }
         
         

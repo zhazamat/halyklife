@@ -15,7 +15,7 @@ using System.Net;
 
 namespace hbk.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/api/[controller]")]
     [ApiController]
     public class EmployeesController : Controller
     {
@@ -28,13 +28,14 @@ namespace hbk.Controllers
 
         
         // GET: api/Employees
-        [HttpGet("/get_all_receiver_messages")]
+        [HttpGet]
         public async Task<ActionResult<IList<Employee>>> GetMessageReceived()
         {
             var employee = await _context.Employees
                  .Include(e => e.Messages)
-                 .Include(e => e.EmployeeMarkets)
-                 .ThenInclude(em => em.Market)
+                 
+               //  .Include(e => e.EmployeeMarkets)
+               //  .ThenInclude(em => em.Market)
                  .ToListAsync();
             if (employee == null)
             {
@@ -115,7 +116,7 @@ namespace hbk.Controllers
 
         [HttpDelete]
         [Route("/delete_employee/{id}")]
-        public async Task<IActionResult> deleteEmloyee(int id)
+        public async Task<IActionResult> DeleteEmloyee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
             if (employee != null)

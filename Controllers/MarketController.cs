@@ -57,7 +57,7 @@ namespace hbk.Controllers
                 
                 Name = addMarketRequest.Name,
                 Description = addMarketRequest.Description,
-                Image = addMarketRequest.Image,
+                GiftImg = addMarketRequest.Image,
                 Quantity = addMarketRequest.Quantity,
                 Price=addMarketRequest.Price
 
@@ -81,7 +81,7 @@ namespace hbk.Controllers
 
 
                     market.Name = updateMarketRequest.Name;
-                    market.Image = updateMarketRequest.Image;
+                    market.GiftImg = updateMarketRequest.Image;
                     market.Description = updateMarketRequest.Description;
                     market.Quantity = updateMarketRequest.Quantity;
                     market.Price = updateMarketRequest.Price;

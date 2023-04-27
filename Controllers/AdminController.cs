@@ -94,7 +94,7 @@ namespace hbk.Controllers
           }
             ThanksBoard thanksBoard = new ThanksBoard()
             {
-
+                
 
                 Message = sendMessageRequest.Message,
                 SenderId = sendMessageRequest.SenderId,
@@ -276,8 +276,10 @@ namespace hbk.Controllers
             {
                 return NotFound();
             }
-            var categories= await _context.Categories
-                .Include(c=>c.Messages)
+          //  var categories= await (from c in _context.Categories select new { id=c.Id, categoryImg=c.CategoryImg, categoryName=c.CategoryName, Description=c.Description})
+          var categories=await _context.Categories
+                .Include(e=>e.Messages)
+
                 .ToListAsync();
            
             return Ok(categories);
@@ -309,12 +311,10 @@ namespace hbk.Controllers
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
-                category.Name = updateCategory.Name;
-
-
+                category.CategoryName = updateCategory.Name;
+                category.CategoryImg = updateCategory.Img;
+                category.Description = updateCategory.Description;
                 return Ok(category);
-
-
             }
 
             _context.Entry(updateCategory).State = EntityState.Modified;
@@ -350,7 +350,9 @@ namespace hbk.Controllers
             Category c = new Category()
             {
 
-                Name = addCategory.Name
+                CategoryName = addCategory.Name,
+                CategoryImg=addCategory.Img,
+                Description=addCategory.Description
 
             };
             _context.Categories.Add(c);

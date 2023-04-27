@@ -38,11 +38,12 @@ namespace hbk
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+         //   app.UseAuthentication();
+          //  app.UseAuthorization();
 
 
             app.MapControllers();
