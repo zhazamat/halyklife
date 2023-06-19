@@ -13,10 +13,11 @@ namespace hbk.Data
         public HbkApiDbContext()
         {
         }
-
+       
         public HbkApiDbContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,24 +25,29 @@ namespace hbk.Data
                 .HasOne<Employee>(e=>e.Receiver)
                 .WithMany(t=>t.Messages)
                 .HasForeignKey(m=>m.ReceiverId);
-
-         modelBuilder.Entity<EmployeeMarket>()
-        .HasKey(em => new { em.EmployeeId, em.MarketId });  
+            
+        /* modelBuilder.Entity<EmployeeMarket>()
+        .HasKey(em => new { em.EmployeeId, em.MarketId });  */
     modelBuilder.Entity<EmployeeMarket>()
         .HasOne(em => em.Employee)
         .WithMany(e => e.EmployeeMarkets)
-        .HasForeignKey(em => em.EmployeeId);  
-    modelBuilder.Entity<EmployeeMarket>()
-        .HasOne(em => em.Market)
-        .WithMany(m => m.EmployeeMarkets)
-        .HasForeignKey(em => em.MarketId);
+        .HasForeignKey(em => em.EmployeeId);
+           
+            modelBuilder.Entity<EmployeeMarket>()
+                  .HasOne(em => em.Market)
+                  .WithMany(m => m.EmployeeMarkets)
+                  .HasForeignKey(em => em.MarketId);
+            /*
+                     modelBuilder.Entity<ThanksBoard>()
+                         .HasOne<Category>(e => e.Category)
+                         .WithMany(t => t.Messages)
+                         .HasForeignKey(m => m.CategoryId);
 
-            modelBuilder.Entity<ThanksBoard>()
-               .HasOne<Category>(e => e.Category)
-               .WithMany(t => t.Messages)
-               .HasForeignKey(m => m.CategoryId);
 
-
+                      /*  modelBuilder.Entity<Category>()
+                        .HasOne<Employee>(e => e.Employee)
+                        .WithMany(t => t.Categories)
+                        .HasForeignKey(m => m.EmployeeId);*/
 
         }
 
@@ -52,6 +58,7 @@ namespace hbk.Data
         public DbSet<Market> Markets { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<EmployeeMarket> EmployeeMarkets { get; set; }
+     //   public DbSet<ProductCategory> ProductCategory { get; set; }
       
 
        

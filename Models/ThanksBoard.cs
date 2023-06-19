@@ -10,7 +10,7 @@ namespace hbk.Models
     {
         [Key, Required]
         public int Id { get; set; }
-       
+
         [DisplayName("Дата получения")]
         public DateTime DateReceived { get; set; }
         [DisplayName("Категория")]
@@ -29,6 +29,7 @@ namespace hbk.Models
         [DisplayName("Сообщение")]
         public string Message { get; set; } = string.Empty;
 
+        public bool IsActive { get; set; }
 
     }
   

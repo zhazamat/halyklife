@@ -13,11 +13,16 @@ namespace hbk
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+            {
+                builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+            }));
+          
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddDbContext<HbkApiDbContext>(o =>
             o.UseNpgsql(builder.Configuration.GetConnectionString("Employee_Api_Db_Context")));
             builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
@@ -31,7 +36,7 @@ namespace hbk
             });
 
             var app = builder.Build();
-
+            app.UseCors("corsapp");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -40,10 +45,10 @@ namespace hbk
             }
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
-
-         //   app.UseAuthentication();
-          //  app.UseAuthorization();
+           // app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            //   app.UseAuthentication();
+            //  app.UseAuthorization();
 
 
             app.MapControllers();

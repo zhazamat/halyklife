@@ -2,12 +2,14 @@
 {
     public class SendMessageRequest
     {
-
+     
+        public string message { get; set; } = string.Empty;
+        public string senderName { get; set; } = string.Empty;
+        public string achiv { get; set; } = string.Empty;
+        public string receiverName { get; set; } = string.Empty;
        
-        public int SenderId { get; set; }
-        public int ReceiverId { get; set; }
-        public string Message { get; set; } = string.Empty;
-        public DateTime SendTime { get; set; } = DateTime.Now;
-        public int CategoryId { get; set; }
+
+
+
     }
 }

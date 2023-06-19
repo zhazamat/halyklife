@@ -16,6 +16,8 @@ namespace hbk.Models
         public int? MarketId { get; set; }
         [JsonIgnore]
         public virtual Market Market { get; set; }
+        public int Quantity { get; set; }
+        public DateTime Date { get; set; } 
 
     }
 }

@@ -13,6 +13,7 @@ namespace hbk.Models
 
         public Employee()
         {
+          //  Categories = new List<Category>();
             ThanksBoards = new HashSet<ThanksBoard>();
             EmployeeMarkets = new HashSet<EmployeeMarket>();
         }
@@ -48,8 +49,8 @@ namespace hbk.Models
         public string linkImg { get; set; } = string.Empty;
         [JsonIgnore]
         public bool IsLocal { get; set; }
-        
-        
+     //  public ICollection<Category> Categories { get; set; } = new List<Category>();
+
         public ICollection<ThanksBoard> Messages { get; set; } = new List<ThanksBoard>();
         public ICollection<EmployeeMarket> EmployeeMarkets { get; set; } = new List<EmployeeMarket>();
     }

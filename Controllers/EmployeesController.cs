@@ -12,6 +12,8 @@ using hbk.Models.Requests.Employees;
 
 using hbk.Models.Requests.EmployeeMarket;
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
 
 namespace hbk.Controllers
 {
@@ -20,28 +22,58 @@ namespace hbk.Controllers
     public class EmployeesController : Controller
     {
         private readonly HbkApiDbContext _context;
-
-        public EmployeesController(HbkApiDbContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _config;
+        public EmployeesController(HbkApiDbContext context, IWebHostEnvironment environment, IConfiguration config)
         {
             _context = context;
+            _webHostEnvironment = environment;
+            _config = config;
         }
 
         
         // GET: api/Employees
-        [HttpGet]
-        public async Task<ActionResult<IList<Employee>>> GetMessageReceived()
+        [HttpGet("get_employees")]
+        public async Task<IActionResult> GetMessageReceived()
         {
-            var employee = await _context.Employees
+            var employees = await _context.Employees
                  .Include(e => e.Messages)
-                 
-               //  .Include(e => e.EmployeeMarkets)
-               //  .ThenInclude(em => em.Market)
+                 .Include(e=>e.EmployeeMarkets)
                  .ToListAsync();
-            if (employee == null)
+            var provider = new PhysicalFileProvider(_webHostEnvironment.WebRootPath);
+            var contents = provider.GetDirectoryContents(Path.Combine("Uploads", "User"));
+            var objFiles = contents.OrderBy(m => m.LastModified).ToArray();
+
+
+            foreach (var empl in employees)
             {
-                return NotFound("Пользователи не найдены ");
+                var obPng = objFiles.FirstOrDefault(x => x.Name.Contains(empl.FullName + ".png"));
+                var obJpg = objFiles.FirstOrDefault(x => x.Name.Contains(empl.FullName + ".jpg"));
+                var obJpeg = objFiles.FirstOrDefault(x => x.Name.Contains(empl.FullName + ".jpeg"));
+                if (obPng != null)
+                {
+                    empl.linkImg = _config.GetValue<string>("Kestrel:Endpoints:Http:Url") + "/Uploads/User/" +
+                                   obPng.Name;
+                }
+                else if (obJpg != null)
+                {
+                    empl.linkImg = _config.GetValue<string>("Kestrel:Endpoints:Http:Url") + "/Uploads/User/" +
+                                   obJpg.Name;
+                }
+                else if (obJpeg != null)
+                {
+                    empl.linkImg = _config.GetValue<string>("Kestrel:Endpoints:Http:Url") + "/Uploads/User/" +
+                                   obJpeg.Name;
+                }
+                else
+                {
+                    empl.linkImg = _config.GetValue<string>("Kestrel:Endpoints:Http:Url") + "/Uploads/User/loader.png";
+                }
             }
-            return Ok(employee);
+
+            return new JsonResult(new { Employees = employees });
+        
+           
         }
 
       

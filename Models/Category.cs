@@ -21,6 +21,7 @@ namespace hbk.Models
         [NotMapped]
         public string CategoryImg { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+     
         public ICollection<ThanksBoard> Messages { get; set; } = new List<ThanksBoard>();
        
     }

@@ -102,10 +102,6 @@ namespace hbk.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("linkImg")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("employees");
@@ -113,16 +109,29 @@ namespace hbk.Migrations
 
             modelBuilder.Entity("hbk.Models.EmployeeMarket", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("EmployeeId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<int?>("MarketId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("EmployeeId", "MarketId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("MarketId");
 
@@ -137,22 +146,18 @@ namespace hbk.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("GiftImg")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<string>("ProductCategory")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -169,11 +174,13 @@ namespace hbk.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CategoryId")
-                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("DateReceived")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -220,9 +227,7 @@ namespace hbk.Migrations
                 {
                     b.HasOne("hbk.Models.Category", "Category")
                         .WithMany("Messages")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("hbk.Models.Employee", "Receiver")
                         .WithMany("Messages")

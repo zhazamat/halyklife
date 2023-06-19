@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using hbk.Data;
 using hbk.Models;
-using hbk.Models.Requests.ThanksBoard;
 using hbk.Models.Requests.Market;
+using hbk.Models.Requests.Category;
 
 namespace hbk.Controllers
 {
@@ -17,10 +17,12 @@ namespace hbk.Controllers
     public class AdminController : ControllerBase
     {
         private readonly HbkApiDbContext _context;
+      //  private readonly ThanksBoardsController _ThanksBoardsController;
 
         public AdminController(HbkApiDbContext context)
         {
             _context = context;
+           // _ThanksBoardsController = ThanksBoardsController;
         }
 
         // GET: api/Admin
@@ -31,7 +33,8 @@ namespace hbk.Controllers
           {
               return NotFound("Таблица не существует");
           }
-            return await _context.ThanksBoards.ToListAsync();
+            var th = await (from t in _context.ThanksBoards select t).ToListAsync();
+            return th;
         }
 
         // GET: api/Admin/5
@@ -82,7 +85,7 @@ namespace hbk.Controllers
 
             return NoContent();
         }
-
+        /*
             // POST: api/Admin
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost("/add_message")]
@@ -92,23 +95,27 @@ namespace hbk.Controllers
           {
               return Problem("Entity set 'HbkApiDbContext.ThanksBoards'  is null.");
           }
-            ThanksBoard thanksBoard = new ThanksBoard()
-            {
-                
+            var k = _ThanksBoardsController.Search(sendMessageRequest.ReceiverInfo);
+            ThanksBoard thanksBoard = new ThanksBoard();
+            var senderId = await (from e in _context.Employees 
+                                  where e.PersonnelNumber.Equals(sendMessageRequest.SenderPersonnelNumber)
+                                  select e.Id)
+                .FirstOrDefaultAsync();
 
-                Message = sendMessageRequest.Message,
-                SenderId = sendMessageRequest.SenderId,
-                ReceiverId = sendMessageRequest.ReceiverId,
-                DateReceived = sendMessageRequest.SendTime,
-                CategoryId=sendMessageRequest.CategoryId
 
-            };
+            thanksBoard.Message = sendMessageRequest.Message;
+            thanksBoard.SenderId = senderId;
+            thanksBoard.ReceiverId = k.Id;
+            thanksBoard.DateReceived = sendMessageRequest.SendTime;
+            thanksBoard.CategoryId = sendMessageRequest.CategoryId;
+
+            
             _context.ThanksBoards.Add(thanksBoard);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetThanksBoard", new { id = thanksBoard.Id }, thanksBoard);
         }
-
+*/
         // DELETE: api/Admin/5
         [HttpDelete("/delete_message_by/{id}")]
         public async Task<IActionResult> DeleteThanksBoard(int id)
@@ -351,7 +358,8 @@ namespace hbk.Controllers
             {
 
                 CategoryName = addCategory.Name,
-                CategoryImg=addCategory.Img,
+               // EmployeeId=addCategory.EmployeeId,
+             //  CategoryImg=addCategory.Img,
                 Description=addCategory.Description
 
             };
